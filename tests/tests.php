@@ -19,7 +19,7 @@ $celery->dispatch(new Greet(['name'=>'world']));
 # combine them together
 $celery->dispatch(new Greet(['world', 'hello'=>'你好']));
 
-// $celery->dispatch(new Greet())->get();
+$celery->dispatch(new Greet())->get();
 
 $celery->dispatch(
     (new Greet())->options(['expires'=>30])

@@ -43,11 +43,22 @@ class Celery
     {
         $message = $task->toMessage($this);
         $this->broker->publish($message);
+        return $this->createAsyncResult($task->getTaskId());
+    }
+
+    public function createAsyncResult($taskid)
+    {
+        return new AsyncResult($taskid, $this->resultBackend);
     }
 
     public function getTimezone()
     {
         return $this->timezone;
+    }
+
+    public function getResultBackend()
+    {
+        return $this->resultBackend;
     }
 
     protected function setupBroker()

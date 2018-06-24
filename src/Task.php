@@ -8,7 +8,14 @@ use Ramsey\Uuid\Uuid;
 
 abstract class Task
 {
+
+    public const READY_STATES = ['SUCCESS', 'FAILURE', 'REVOKED'];
+
+    public const PROPAGATE_STATES = ['FAILURE', 'REVOKED'];
+
     protected $name;
+
+    protected $taskid;
 
     protected $args = [];
 
@@ -35,6 +42,7 @@ abstract class Task
         if (! $this->name) {
             throw new Exception("name of this task is not defined");
         }
+        $this->taskid = (string)Uuid::uuid4();
 
         foreach ($params as $key => $value) {
             if (is_int($key)) {
@@ -114,21 +122,29 @@ abstract class Task
         return $this;
     }
 
+    public function setTaskId($taskid)
+    {
+        $this->taskid = $taskid;
+    }
+
+    public function getTaskId()
+    {
+        return $this->taskid;
+    }
+
     public function toMessage($celery)
     {
-        $taskid = (string)Uuid::uuid4();
-
         $headers = [
             'lang'=>'py',
             'task'=>$this->name,
-            'id'=>$taskid,
+            'id'=>$this->taskid,
             'shadow'=>null,
             'eta'=>$this->resolveEta($celery->getTimezone()),
             'expires'=>$this->resolveExpires($celery->getTimezone()),
             'group'=>null,
             'retries'=>0,
             'timelimit'=>[$this->timeLimit, $this->softTimeLimit],
-            'root_id'=>$taskid,
+            'root_id'=>$this->taskid,
             'parent_id'=>null,
             'argsrepr'=>json_encode($this->args),
             'kwargsrepr'=>json_encode((object)$this->kwargs),
@@ -136,7 +152,7 @@ abstract class Task
         ];
 
         $properties = [
-            'correlation_id'=>$taskid,
+            'correlation_id'=>$this->taskid,
             'reply_to'=>'',
             'delivery_mode'=>2,
             'delivery_info'=>[
