@@ -3,7 +3,6 @@
     "type": "library",
     "description": "A library let you calling tasks from Celery",
     "license": "MIT",
-    "version": "0.1.0",
     "authors": [
         {
             "name": "Living42",
