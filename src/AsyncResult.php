@@ -21,9 +21,9 @@ class AsyncResult
         return $this->taskid;
     }
 
-    public function get($timeout = null, $interval = 0.5)
+    public function get($timeout = null)
     {
-        $meta = $this->resultBackend->waitForPending($this->taskid, $timeout, $interval);
+        $meta = $this->resultBackend->waitForPending($this->taskid, $timeout);
 
         if (in_array($meta['status'], Task::PROPAGATE_STATES)) {
             if ($meta['status'] == 'REVOKED') {
