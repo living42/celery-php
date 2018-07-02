@@ -25,12 +25,12 @@ class AsyncResult
     {
         $meta = $this->resultBackend->waitForPending($this->taskid, $timeout);
 
-        if (in_array($meta['status'], Task::PROPAGATE_STATES)) {
-            if ($meta['status'] == 'REVOKED') {
-                throw new TaskRevokedError($meta['result']);
+        if (in_array($meta->status, Task::PROPAGATE_STATES)) {
+            if ($meta->status == 'REVOKED') {
+                throw new TaskRevokedError($meta->result);
             }
-            throw new TaskError($meta['result'], $meta['traceback']);
+            throw new TaskError($meta->result->exc_message, $meta->traceback);
         }
-        return $meta['result'];
+        return $meta->result;
     }
 }

@@ -9,9 +9,9 @@ use Ramsey\Uuid\Uuid;
 abstract class Task
 {
 
-    public const READY_STATES = ['SUCCESS', 'FAILURE', 'REVOKED'];
+    const READY_STATES = ['SUCCESS', 'FAILURE', 'REVOKED'];
 
-    public const PROPAGATE_STATES = ['FAILURE', 'REVOKED'];
+    const PROPAGATE_STATES = ['FAILURE', 'REVOKED'];
 
     protected $name;
 

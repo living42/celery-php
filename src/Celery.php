@@ -34,6 +34,10 @@ class Celery
             $this->setupResultBackend();
         }
 
+        if (parse_url($this->resultBackendUrl, PHP_URL_SCHEME) !== 'redis') {
+            throw new Exception('currently only support redis as result backend');
+        }
+
         if (isset($options['timezone'])) {
             $this->timezone = $options['timezone'];
         }

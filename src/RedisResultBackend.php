@@ -24,7 +24,7 @@ class RedisResultBackend
     {
         $meta = $this->client->get($this->getKeyForTask($taskid));
         if (! $meta) {
-            return ['status'=>'PENDING', 'result'=>null];
+            return (object)['status'=>'PENDING', 'result'=>null];
         }
         return $this->decode($meta);
     }
@@ -46,14 +46,14 @@ class RedisResultBackend
 
         while (true) {
             $meta = $this->getTaskMeta($taskid);
-            if (in_array($meta['status'], Task::READY_STATES)) {
+            if (in_array($meta->status, Task::READY_STATES)) {
                 return $meta;
             }
             try {
                 foreach ($pubsub as $message) {
                     if ($message->kind === 'message') {
                         $meta = $this->decode($message->payload);
-                        if (in_array($meta['status'], Task::READY_STATES)) {
+                        if (in_array($meta->status, Task::READY_STATES)) {
                             return $meta;
                         }
                     }
@@ -69,7 +69,7 @@ class RedisResultBackend
 
     protected function decode($payload)
     {
-        return json_decode($payload, JSON_OBJECT_AS_ARRAY);
+        return json_decode($payload);
     }
 
     protected function createClient($url, $options = [])
