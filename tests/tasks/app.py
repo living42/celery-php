@@ -11,3 +11,8 @@ def greet(name=None, hello='hello'):
     if name:
         return f'{hello}, {name}'
     return hello
+
+
+@app.task
+def bad():
+    1 / 0

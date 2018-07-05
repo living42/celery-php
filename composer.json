@@ -17,7 +17,14 @@
             "Celery\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "require-dev": {
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "phpunit/phpunit": "^7.2",
+        "phpunit/php-code-coverage": "^6.0"
     }
 }
