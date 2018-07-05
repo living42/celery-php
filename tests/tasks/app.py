@@ -9,7 +9,7 @@ app.conf.update(task_queues=[Queue('celery'), Queue('default')])
 @app.task
 def greet(name=None, hello='hello'):
     if name:
-        return f'{hello}, {name}'
+        return '{hello}, {name}'.format(**locals())
     return hello
 
 

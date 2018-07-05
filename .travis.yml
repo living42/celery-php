@@ -1,0 +1,28 @@
+language: php
+
+php:
+  - '7.0'
+  - '7.1'
+  - '7.2'
+
+cache:
+  - composer
+  - pip
+  - apt
+
+sudo: false
+
+services:
+  - redis-server
+
+before_script:
+  - sudo apt-get update
+  - sudo apt-get install python3 python3-pip
+  - sudo -H pip install -r tests/tasks/requirements.txt
+  - celery multi start node1 -A app -b redis://localhost --result-backend=redis://localhost --workdir=$PWD/tests/tasks
+  - sleep 5
+  - celery inspect ping -A app -b redis://localhost --workdir=$PWD/tests/tasks
+
+install: travis_retry composer install --no-interaction --prefer-dist --no-suggest
+
+script: vendor/bin/phpunit --verbose
