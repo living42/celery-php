@@ -3,11 +3,15 @@ namespace Celery\Exception;
 
 class TaskError extends CeleryException
 {
-    protected $traceback;
+    protected $result;
 
-    public function __construct($message, $traceback = null)
+    public function __construct($result)
     {
-        parent::__construct($message);
-        $this->$traceback = $traceback;
+        $this->result = $result;
+        $message = $result->exc_message;
+        if (is_array($message)) {
+            $message = implode(', ', $message);
+        }
+        parent::__construct("{$result->exc_type}: {$message}");
     }
 }

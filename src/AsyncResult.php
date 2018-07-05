@@ -29,7 +29,7 @@ class AsyncResult
             if ($meta->status == 'REVOKED') {
                 throw new TaskRevokedError($meta->result);
             }
-            throw new TaskError($meta->result->exc_message, $meta->traceback);
+            throw new TaskError($meta->result, $meta->traceback);
         }
         return $meta->result;
     }
