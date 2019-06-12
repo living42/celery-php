@@ -21,7 +21,7 @@ before_script:
   - sudo -H pip install -r tests/tasks/requirements.txt
   - celery multi start node1 -A app -b redis://localhost --result-backend=redis://localhost --workdir=$PWD/tests/tasks
   - sleep 5
-  - celery inspect ping -A app -b redis://localhost --workdir=$PWD/tests/tasks
+  - sh -c "echo 'greet.delay().get(5);quit()' | celery -A app shell -b redis://localhost --result-backend=redis://localhost --workdir=$PWD/tests/tasks"
 
 install: travis_retry composer install --no-interaction --prefer-dist --no-suggest
 
