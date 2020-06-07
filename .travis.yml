@@ -18,7 +18,7 @@ services:
 before_script:
   - sudo apt-get update
   - sudo apt-get install python3 python3-pip
-  - sudo -H pip install -r tests/tasks/requirements.txt
+  - sudo -H pip3 install -r tests/tasks/requirements.txt
   - sudo celery multi start node1 -A app -b redis://localhost --result-backend=redis://localhost --workdir=$PWD/tests/tasks
   - sleep 5
   - sh -c "echo 'greet.delay().get(5);quit()' | celery -A app shell -b redis://localhost --result-backend=redis://localhost --workdir=$PWD/tests/tasks"
